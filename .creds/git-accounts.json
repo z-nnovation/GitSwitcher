@@ -1,10 +1,10 @@
 {
     "personal": {
-        "name": "",
-        "email": ""
+        "name": "test1",
+        "email": "t1@t.com"
     },
     "work": {
-        "name": "",
-        "email": ""
+        "name": "test2",
+        "email": "t2@.com"
     }
 }

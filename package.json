@@ -4,19 +4,31 @@
   "description": "Program that helps you switch between your GitHub, GitLab & Bitbucket accounts.",
   "main": "dist/index.js",
   "scripts": {
-    "build": "tsc",
+    "build": "node build.js && tsc",
     "start": "npx ts-node src/index.ts",
     "prepare": "npm run build"
   },
   "bin": {
     "switch-account": "./dist/index.js"
   },
-  "keywords": ["git", "switch", "GitHub", "GitLab", "Bitbucket"],
+  "keywords": [
+    "git",
+    "switch",
+    "GitHub",
+    "GitLab",
+    "Bitbucket"
+  ],
   "author": "Your Name",
   "license": "ISC",
   "devDependencies": {
+    "@types/better-sqlite3": "^7.6.11",
     "@types/node": "^22.4.1",
     "ts-node": "^10.9.2",
     "typescript": "^5.5.4"
+  },
+  "dependencies": {
+    "better-sqlite3": "^11.1.2",
+    "crypto": "^1.0.1",
+    "validator": "^13.12.0"
   }
 }
