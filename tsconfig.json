@@ -1,0 +1,12 @@
+{
+  "compilerOptions": {
+    "target": "ES6",            // Или выше
+    "module": "CommonJS",       // Убедитесь, что используется CommonJS
+    "rootDir": "src",
+    "outDir": "dist",           // Скомпилированные файлы помещаются в "dist"
+    "esModuleInterop": true,    // Включает совместимость с модулями ES6
+    "forceConsistentCasingInFileNames": true,
+    "strict": true,
+    "skipLibCheck": true
+  }
+}
