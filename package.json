@@ -1,0 +1,22 @@
+{
+  "name": "gitswitcher",
+  "version": "1.0.0",
+  "description": "Program that helps you switch between your GitHub, GitLab & Bitbucket accounts.",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc",
+    "start": "npx ts-node src/index.ts",
+    "prepare": "npm run build"
+  },
+  "bin": {
+    "switch-account": "./dist/index.js"
+  },
+  "keywords": ["git", "switch", "GitHub", "GitLab", "Bitbucket"],
+  "author": "Your Name",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "^22.4.1",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.5.4"
+  }
+}
