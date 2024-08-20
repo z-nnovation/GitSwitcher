@@ -60,7 +60,7 @@ export function addAccount(tableName: string, name: string, email: string, token
     console.log(`Account '${name}' added to table '${tableName}'.`);
 
     if (token) {
-        storeCredentials("github.com", name, decrypt(encryptedToken!)); // Пример для GitHub
+        storeCredentials("github.com", name, decrypt(encryptedToken!)); 
     }
 }
 
@@ -120,8 +120,8 @@ export function switchAccount(tableName: string, identifier: string): void {
     console.log(`Name: ${row.name}`);
     console.log(`Email: ${row.email}`);
     if (row.token) {
-        console.log(`Token/Password: ****`); // Скроем вывод токена
-        storeCredentials("github.com", row.name, decrypt(row.token!)); // Пример для GitHub
+        console.log(`Token/Password: ****`);
+        storeCredentials("github.com", row.name, decrypt(row.token!));
     }
 
     execSync(`git config --global user.name "${row.name}"`);
