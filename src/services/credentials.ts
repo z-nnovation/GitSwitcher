@@ -3,7 +3,7 @@ import { encrypt, decrypt } from './encryption';
 import * as validator from 'validator';
 import { storeCredentials } from './utils';
 import { execSync } from 'child_process';
-
+import readlineSync from 'readline-sync';
 
 interface AccountConfig {
     id: number;
@@ -43,6 +43,12 @@ export function deleteTable(tableName: string): void {
 }
 
 // export function addAccount(tableName: string, name: string, email: string, token?: string): void {
+//     const tableExists = db.prepare(`SELECT name FROM sqlite_master WHERE type='table' AND name=?;`).get(tableName);
+//     if (!tableExists) {
+//         console.error(`Error: Table '${tableName}' does not exist. Please create the table first using 'gitswitcher create ${tableName}'.`);
+//         process.exit(1);
+//     }
+
 //     if (!validator.isEmail(email)) {
 //         console.error('Invalid email address.');
 //         process.exit(1);
@@ -60,11 +66,12 @@ export function deleteTable(tableName: string): void {
 //     console.log(`Account '${name}' added to table '${tableName}'.`);
 
 //     if (token) {
-//         storeCredentials("github.com", name, decrypt(encryptedToken!)); 
+//         storeCredentials("github.com", name, decrypt(encryptedToken!));
 //     }
 // }
 
 export function addAccount(tableName: string, name: string, email: string, token?: string): void {
+    // Проверка на существование таблицы
     const tableExists = db.prepare(`SELECT name FROM sqlite_master WHERE type='table' AND name=?;`).get(tableName);
     if (!tableExists) {
         console.error(`Error: Table '${tableName}' does not exist. Please create the table first using 'gitswitcher create ${tableName}'.`);
@@ -88,7 +95,19 @@ export function addAccount(tableName: string, name: string, email: string, token
     console.log(`Account '${name}' added to table '${tableName}'.`);
 
     if (token) {
-        storeCredentials("github.com", name, decrypt(encryptedToken!));
+        // Определяем хост по умолчанию для известных сервисов
+        let host = tableName.toLowerCase() === 'github' ? 'github.com' :
+                   tableName.toLowerCase() === 'gitlab' ? 'gitlab.com' :
+                   tableName.toLowerCase() === 'bitbucket' ? 'bitbucket.org' :
+                   null;
+
+        // Если хост не распознан, спрашиваем пользователя
+        if (!host) {
+            host = readlineSync.question('Please enter the host for this account (e.g., pixietown.com): ');
+        }
+
+        storeCredentials(host, name, decrypt(encryptedToken!));
+        console.log(`Credentials for ${name} have been stored with host ${host}.`);
     }
 }
 

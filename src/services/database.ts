@@ -10,7 +10,7 @@ let encryptionKey: string;
 if (!fs.existsSync(encryptionKeyPath)) {
     encryptionKey = crypto.randomBytes(32).toString('hex');
     fs.writeFileSync(encryptionKeyPath, encryptionKey);
-    console.log(`Encryption key generated and saved to ${encryptionKeyPath}`);
+    //console.log(`Encryption key generated and saved to ${encryptionKeyPath}`);
 } else {
     encryptionKey = fs.readFileSync(encryptionKeyPath, 'utf-8').trim();
     //console.log(`Encryption key loaded from ${encryptionKeyPath}`);
