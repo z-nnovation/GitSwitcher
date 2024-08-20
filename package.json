@@ -1,15 +1,15 @@
 {
   "name": "gitswitcher",
-  "version": "1.0.0",
+  "version": "1.0.6",
   "description": "Program that helps you switch between your GitHub, GitLab & Bitbucket accounts.",
   "main": "dist/index.js",
   "scripts": {
-    "build": "node build.js && tsc",
-    "start": "npx ts-node src/index.ts",
+    "build": "node build.js && ./node_modules/.bin/tsc",
+    "postinstall": "npm run build && chmod +x ./dist/index.js",
     "prepare": "npm run build"
   },
   "bin": {
-    "switch-account": "./dist/index.js"
+    "gitswitcher": "./dist/index.js"
   },
   "keywords": [
     "git",
@@ -18,17 +18,18 @@
     "GitLab",
     "Bitbucket"
   ],
-  "author": "Your Name",
+  "author": "Denis Yasyuchenya ZNN",
   "license": "ISC",
-  "devDependencies": {
-    "@types/better-sqlite3": "^7.6.11",
-    "@types/node": "^22.4.1",
-    "ts-node": "^10.9.2",
-    "typescript": "^5.5.4"
-  },
   "dependencies": {
     "better-sqlite3": "^11.1.2",
     "crypto": "^1.0.1",
-    "validator": "^13.12.0"
+    "validator": "^13.12.0",
+    "typescript": "^5.5.4",
+    "@types/node": "^22.4.1",
+    "@types/validator": "^13.12.0",
+    "@types/better-sqlite3": "^7.6.11"
+  },
+  "devDependencies": {
+    "ts-node": "^10.9.2"
   }
 }

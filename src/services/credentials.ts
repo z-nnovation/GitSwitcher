@@ -102,6 +102,16 @@ export function showTables(): void {
 }
 
 export function switchAccount(tableName: string, identifier: string): void {
+    // Проверяем, существует ли таблица
+    const tableExists = db.prepare(`
+        SELECT name FROM sqlite_master WHERE type='table' AND name=?;
+    `).get(tableName);
+
+    if (!tableExists) {
+        console.error(`Table '${tableName}' does not exist.`);
+        process.exit(1);
+    }
+
     let row: AccountConfig | undefined;
 
     if (!isNaN(Number(identifier))) {
