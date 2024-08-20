@@ -130,4 +130,5 @@ dist
 .pnp.*
 
 encryption-key.txt
+.db
 secure-database.db

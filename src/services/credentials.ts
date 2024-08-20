@@ -42,7 +42,35 @@ export function deleteTable(tableName: string): void {
     }
 }
 
+// export function addAccount(tableName: string, name: string, email: string, token?: string): void {
+//     if (!validator.isEmail(email)) {
+//         console.error('Invalid email address.');
+//         process.exit(1);
+//     }
+
+//     const exists = db.prepare(`SELECT * FROM ${tableName} WHERE name = ? OR email = ?`).get(name, email);
+//     if (exists) {
+//         console.error('Account with this name or email already exists.');
+//         process.exit(1);
+//     }
+
+//     const encryptedToken = token ? encrypt(token) : null;
+//     const stmt = db.prepare(`INSERT INTO ${tableName} (name, email, token) VALUES (?, ?, ?)`);
+//     stmt.run(name, email, encryptedToken);
+//     console.log(`Account '${name}' added to table '${tableName}'.`);
+
+//     if (token) {
+//         storeCredentials("github.com", name, decrypt(encryptedToken!)); 
+//     }
+// }
+
 export function addAccount(tableName: string, name: string, email: string, token?: string): void {
+    const tableExists = db.prepare(`SELECT name FROM sqlite_master WHERE type='table' AND name=?;`).get(tableName);
+    if (!tableExists) {
+        console.error(`Error: Table '${tableName}' does not exist. Please create the table first using 'gitswitcher create ${tableName}'.`);
+        process.exit(1);
+    }
+
     if (!validator.isEmail(email)) {
         console.error('Invalid email address.');
         process.exit(1);
@@ -60,7 +88,7 @@ export function addAccount(tableName: string, name: string, email: string, token
     console.log(`Account '${name}' added to table '${tableName}'.`);
 
     if (token) {
-        storeCredentials("github.com", name, decrypt(encryptedToken!)); 
+        storeCredentials("github.com", name, decrypt(encryptedToken!));
     }
 }
 
