@@ -1,39 +1,58 @@
 #!/usr/bin/env node
 
-import { execSync } from 'child_process';
-import * as fs from 'fs';
-import * as path from 'path';
+import { createTable, deleteTable, addAccount, deleteAccount, showAccounts, showTables, switchAccount } from './services/credentials';
 
-const CONFIG_FILE_PATH = path.resolve(__dirname, '../.creds/git-accounts.json');
+const command = process.argv[2];
+const tableName = process.argv[3];
+const identifier = process.argv[4];
+const email = process.argv[5];
 
-interface AccountConfig {
-    name: string;
-    email: string;
+console.log('Command received:', command);
+function printHelp() {
+    console.log(`
+                   ▄▀▒░█░▀█▀░▄▀▀░█ ░▒█░█░▀█▀░▄▀▀░█▄█▒██▀▒█▀▄
+                  ░▀▄█░█ ▒█▒▒▄██░▀▄▀▄▀░█ ▒█▒░▀▄▄▒█▒█░█▄▄░█▀▄
+
+Usage:
+  gitswitcher create <folder_name>
+  gitswitcher delete-table <folder_name>
+  gitswitcher add <folder_name> <name> <email> [token]
+  gitswitcher delete-account <folder_name> <identifier>
+  gitswitcher show <folder_name>
+  gitswitcher show-folders
+  gitswitcher use <folder_name> <identifier>
+    `);
 }
 
-function switchAccount(account: string): void {
-    if (!fs.existsSync(CONFIG_FILE_PATH)) {
-        console.error(`Configuration file not found: ${CONFIG_FILE_PATH}`);
-        process.exit(1);
-    }
-
-    const config = JSON.parse(fs.readFileSync(CONFIG_FILE_PATH, 'utf-8')) as Record<string, AccountConfig>;
-
-    if (!config[account]) {
-        console.error(`Account ${account} not found in configuration`);
-        process.exit(1);
-    }
-
-    execSync(`git config --global user.name "${config[account].name}"`);
-    execSync(`git config --global user.email "${config[account].email}"`);
-
-    console.log(`Switched to ${account} account`);
+if (!command || command === '--help') {
+    printHelp();
+    process.exit(0);
 }
 
-const account = process.argv[2];
-if (!account) {
-    console.error('Please provide an account name');
+if (command === 'create') {
+    createTable(tableName);
+} else if (command === 'delete-table') {
+    deleteTable(tableName);
+} else if (command === 'add') {
+    if (!identifier || !email) {
+        console.error('Please provide both a name and an email.');
+        process.exit(1);
+    }
+    addAccount(tableName, identifier, email, process.argv[6]);
+} else if (command === 'delete-account') {
+    if (!identifier) {
+        console.error('Please provide an account ID or name.');
+        process.exit(1);
+    }
+    deleteAccount(tableName, identifier);
+} else if (command === 'show') {
+    showAccounts(tableName);
+} else if (command === 'show-folders') {
+    showTables();
+} else if (command === 'use') {
+    switchAccount(tableName, identifier);
+} else {
+    console.error('Unknown command.');
+    printHelp();
     process.exit(1);
 }
-
-switchAccount(account);
